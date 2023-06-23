@@ -1,5 +1,5 @@
 {
-	"model_name" : "CNNMnist",
+	"model_name" : "LeNet",
 
 	"clients" : 3,
 
