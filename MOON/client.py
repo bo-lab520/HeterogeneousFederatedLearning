@@ -42,6 +42,7 @@ class Client(object):
                 optimizer.zero_grad()
 
                 _, cur_proj, output = self.local_model(data)
+
                 _, global_proj, _ = global_model(data)
 
                 # 计算本地模型与全局模型的representation的相似度
@@ -58,8 +59,8 @@ class Client(object):
                 # self.last_epoch_model.to('cpu')
 
                 logits /= self.conf["T"]
-                labels = torch.zeros(data.size(0)).cuda().long()
-                # labels = torch.zeros(data.size(0)).cpu().long()
+                # labels = torch.zeros(data.size(0)).cuda().long()
+                labels = torch.zeros(data.size(0)).cpu().long()
 
                 loss2 = self.conf["mu"] * torch.nn.functional.cross_entropy(logits, labels)
 

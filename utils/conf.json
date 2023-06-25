@@ -1,9 +1,9 @@
 {
-	"model_name" : "resnet18",
+	"model_name" : "cnnmnist",
 
-	"clients" : 20,
+	"clients" : 3,
 
-	"type" : "cifar10",
+	"type" : "mnist",
 
 	"classes" : 10,
 	

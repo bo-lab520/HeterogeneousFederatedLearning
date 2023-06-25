@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from models.ResNetv1 import resnet18, resnet34, resnet50, resnet101, resnet152
 from models.ResNetv2 import resnet8, resnet14, resnet20, resnet32, resnet44, resnet56, \
     resnet110, resnet116, resnet8x4, resnet32x4
-from models.CNNMnist import cnnmnist
+from models.CNNMnist import cnnmnist, LeNet
 
 
 def get_model(name):
@@ -41,6 +41,8 @@ def get_model(name):
         model = resnet32x4()
     elif name == "cnnmnist":
         model = cnnmnist()
+    elif name == "lenet":
+        model = LeNet()
 
     if torch.cuda.is_available():
         return model.cuda()
@@ -53,9 +55,13 @@ class MOONModel(nn.Module):
     def __init__(self, base_model, out_dim, n_classes):
         super(MOONModel, self).__init__()
 
-        basemodel = get_model(base_model)
-        self.features = nn.Sequential(*list(basemodel.children())[:-1])
-        num_ftrs = basemodel.fc.in_features
+        if base_model == "cnnmnist":
+            self.features = get_model(base_model)
+            num_ftrs = 50
+        else:
+            basemodel = get_model(base_model)
+            self.features = nn.Sequential(*list(basemodel.children())[:-1])
+            num_ftrs = basemodel.fc.in_features
 
         # projection MLP 投影器
         self.l1 = nn.Linear(num_ftrs, num_ftrs)

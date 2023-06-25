@@ -34,7 +34,7 @@ class Server(object):
                 data = data.cuda()
                 target = target.cuda()
 
-            output = self.global_model(data)
+            _, _, output = self.global_model(data)
 
             # sum up batch loss
             total_loss += torch.nn.functional.cross_entropy(output, target, reduction='sum').item()
