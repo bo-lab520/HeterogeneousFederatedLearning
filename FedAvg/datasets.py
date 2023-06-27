@@ -1,5 +1,4 @@
-
-
+import numpy as np
 import torch
 
 from torchvision import datasets, transforms
@@ -43,3 +42,15 @@ def get_dataset(dir, name):
 		eval_dataset = datasets.CIFAR100(dir, train=False, transform=transform_test)
 
 	return train_dataset, eval_dataset
+
+
+def get_nonIID_data(conf):
+    client_idx = {}
+    all_data = []
+    for i in range(conf["classes"]):
+        all_data.append(i)
+    for i in range(conf["clients"]):
+        samples = np.random.choice(all_data, size=conf["client_classes"], replace=False)
+        client_idx[i + 1] = samples
+
+    return client_idx

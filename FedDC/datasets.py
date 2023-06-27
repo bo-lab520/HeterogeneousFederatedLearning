@@ -1,5 +1,3 @@
-import json
-
 import numpy as np
 import torch
 
@@ -59,12 +57,5 @@ def get_nonIID_data(conf):
 
 
 if __name__ == '__main__':
-    with open("../utils/conf.json", 'r') as f:
-        conf = json.load(f)
-
-    client_idx = get_nonIID_data(conf)
-    print(client_idx)
-
-    print(int(torch.tensor(1)))
-
-    print(int(torch.tensor(1)) in client_idx[1])
+    cls_priors = np.random.dirichlet(alpha=(1, 1), size=3)
+    print(cls_priors)

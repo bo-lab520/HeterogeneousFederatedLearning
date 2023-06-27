@@ -3,7 +3,15 @@
 
 	"clients" : 3,
 
+	"non-iid": 1,
+
+	"client_classes" : 5,
+
 	"type" : "mnist",
+
+	"channels" : 1,
+
+	"pic_size" : 28,
 
 	"classes" : 10,
 	
@@ -21,7 +29,9 @@
 
 	"mu" : 0.01,
 
+	"alpha" : 0.5,
+
 	"T" : 0.5,
 
-	"out_dim" : 256
+	"out_dim" : 32
 }

@@ -12,8 +12,13 @@ if __name__ == '__main__':
 
     server = Server(conf, eval_datasets)
     clients = []
+    # non-IID数据
+    client_idx = datasets.get_nonIID_data(conf)
+
+    # print(client_idx)
+
     for c in range(conf["clients"]):
-        clients.append(Client(conf, server.global_model, train_datasets, c + 1))
+        clients.append(Client(conf, server.global_model, train_datasets, client_idx[c + 1], c + 1))
 
     all_acc = []
     # 记录控制变量差值

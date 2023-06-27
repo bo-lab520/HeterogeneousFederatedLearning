@@ -26,6 +26,26 @@ class LeNet(nn.Module):
 
         return F.log_softmax(out, dim=1)
 
+class cnnmnist(nn.Module):
+    def __init__(self):
+        super(cnnmnist, self).__init__()
+        self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
+        self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
+        self.conv2_drop = nn.Dropout2d()
+        self.fc1 = nn.Linear(320, 50)
+        self.fc = nn.Linear(50, 10)
+
+    def forward(self, x):
+        x = F.relu(F.max_pool2d(self.conv1(x), 2))
+        x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
+        # 数据摊平
+        x = x.view(-1, x.shape[1] * x.shape[2] * x.shape[3])
+        x1 = F.relu(self.fc1(x))
+        x = F.dropout(x1, training=self.training)
+        x = self.fc(x)
+        return F.log_softmax(x, dim=1)
+        # return x
+
 
 def get_model(name="vgg16", pretrained=True):
     if name == "resnet18":
@@ -46,6 +66,8 @@ def get_model(name="vgg16", pretrained=True):
         model = models.googlenet(pretrained=pretrained)
     elif name == "LeNet":
         model = LeNet()
+    elif name == "cnnmnist":
+        model = cnnmnist()
 
     if torch.cuda.is_available():
         return model.cuda()

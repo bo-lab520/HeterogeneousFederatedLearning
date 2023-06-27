@@ -1,7 +1,7 @@
 ﻿import copy
 import json
 
-from FedAvg.server import Server
+from server import Server
 from client import *
 import datasets
 
@@ -33,11 +33,13 @@ if __name__ == '__main__':
         for name, params in server.global_model.state_dict().items():
             weight_accumulator[name] = torch.zeros_like(params)
         for c in candidates:
-            diff = c.local_train(server.global_model)
+            diff = c.local_train(server.global_model, server.last_global_update)
             for name, params in server.global_model.state_dict().items():
                 weight_accumulator[name].add_(diff[name])
 
         server.model_aggregate(weight_accumulator)
+        server.get_last_global_update()
+
         acc, loss = server.model_eval()
         all_acc.append(acc)
         print("Global Epoch %d, acc: %f, loss: %f\n" % (e, acc, loss))
