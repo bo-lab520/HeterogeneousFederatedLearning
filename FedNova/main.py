@@ -1,6 +1,6 @@
 ﻿import copy
 
-from FedNova.server import Server
+from server import Server
 from client import *
 import datasets
 

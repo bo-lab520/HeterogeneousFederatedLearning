@@ -3,8 +3,6 @@
 
 	"clients" : 3,
 
-	"non-iid": 1,
-
 	"client_classes" : 5,
 
 	"type" : "mnist",

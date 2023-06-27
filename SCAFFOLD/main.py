@@ -1,6 +1,6 @@
 ﻿import json
 
-from SCAFFOLD.server import Server
+from server import Server
 from client import *
 import datasets
 

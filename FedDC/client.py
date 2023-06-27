@@ -65,6 +65,7 @@ class Client(object):
 
         for name, param in global_model.state_dict().items():
             self.local_model.state_dict()[name].copy_(param.clone())
+
         optimizer = torch.optim.SGD(self.local_model.parameters(), lr=self.conf['lr'], momentum=self.conf['momentum'])
         self.local_model.train()
         for e in range(self.conf["local_epochs"]):
