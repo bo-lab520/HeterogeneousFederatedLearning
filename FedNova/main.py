@@ -15,8 +15,13 @@ if __name__ == '__main__':
 
     clients = []
 
+    # non-IID数据
+    client_idx = datasets.get_nonIID_data(conf)
+
+    # print(client_idx)
+
     for c in range(conf["clients"]):
-        clients.append(Client(conf, server.global_model, train_datasets, c + 1))
+        clients.append(Client(conf, server.global_model, train_datasets, client_idx[c + 1], c + 1))
 
     server.set_clients(clients)
 
@@ -37,7 +42,6 @@ if __name__ == '__main__':
             client_n_data[c.client_id] = n_data
             client_coeff[c.client_id] = coeff
             client_norm_grad[c.client_id] = norm_grad
-
             server.n_data += n_data
 
         server.model_aggregate(client_state, client_n_data, client_coeff, client_norm_grad)
