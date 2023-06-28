@@ -1,7 +1,7 @@
 {
 	"model_name" : "cnnmnist",
 
-	"clients" : 3,
+	"clients" : 2,
 
 	"client_classes" : 5,
 
@@ -15,7 +15,7 @@
 	
 	"global_epochs" : 100,
 	
-	"local_epochs" : 3,
+	"local_epochs" : 1,
 	
 	"batch_size" : 32,
 	
@@ -31,5 +31,9 @@
 
 	"T" : 0.5,
 
-	"out_dim" : 32
+	"out_dim" : 32,
+
+	"dirichlet_alpha" : 100,
+
+	"beta" : 0.9
 }

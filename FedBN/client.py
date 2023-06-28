@@ -1,4 +1,5 @@
-from torch.utils.data import DataLoader, sampler
+import numpy as np
+from torch.utils.data import DataLoader, sampler, Subset
 import torch
 
 import models
@@ -13,9 +14,9 @@ class Client(object):
         self.local_model = models.get_model(self.conf["model_name"])
         self.local_model.load_state_dict(model.state_dict())
 
-        self.non_iid = non_iid
+        sub_trainset: Subset = Subset(train_dataset, indices=non_iid)
 
-        self.train_loader = DataLoader(train_dataset, batch_size=conf["batch_size"], shuffle=True)
+        self.train_loader = DataLoader(sub_trainset, batch_size=conf["batch_size"], shuffle=False)
         self.eval_loader = DataLoader(eval_dataset, batch_size=self.conf["batch_size"], shuffle=True)
 
     def update_model(self, global_model):
@@ -28,28 +29,19 @@ class Client(object):
         optimizer = torch.optim.SGD(self.local_model.parameters(), lr=self.conf['lr'], momentum=self.conf['momentum'])
         self.local_model.train()
         for e in range(self.conf["local_epochs"]):
-            _data = torch.zeros(self.conf["batch_size"], self.conf["channels"], self.conf["pic_size"],
-                                self.conf["pic_size"])
-            _target = torch.zeros(self.conf["batch_size"], dtype=torch.long)
-            index = 0
             for batch_id, batch in enumerate(self.train_loader):
                 data, target = batch
-                # non-iid data
-                for i in range(len(target)):
-                    if int(target[i]) in self.non_iid:
-                        _target[index] = target[i]
-                        _data[index] = data[i]
-                        index += 1
-                        if index == self.conf["batch_size"]:
-                            index = 0
-                            if torch.cuda.is_available():
-                                _data = _data.cuda()
-                                _target = _target.cuda()
-                            optimizer.zero_grad()
-                            output = self.local_model(_data)
-                            loss = torch.nn.functional.cross_entropy(output, _target)
-                            loss.backward()
-                            optimizer.step()
+                if torch.cuda.is_available():
+                    data = data.cuda()
+                    target = target.cuda()
+                optimizer.zero_grad()
+                output = self.local_model(data)
+                if len(target) == 1:
+                    _output = torch.zeros(1, len(output))
+                    output = _output
+                loss = torch.nn.functional.cross_entropy(output, target)
+                loss.backward()
+                optimizer.step()
 
             print("Client {} Epoch {} done.".format(self.client_id, e))
 
@@ -84,4 +76,4 @@ class Client(object):
 
 
 if __name__ == '__main__':
-    print('bn' not in 'bnsas')
+    print(np.random.dirichlet(alpha=1, size=3))

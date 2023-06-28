@@ -1,1 +1,2 @@
-实现各种异构联邦学习，包括FedAvg、FedProx、SCAFFOLD、FedNova、MOON、FedDC、FedBN
+## 实现各种异构联邦学习
+contains [FedAvg](), [FedProx](), [SCAFFOLD](), [FedNova](), [MOON](), [FedDC](), [FedBN](), [FedAvgM]()

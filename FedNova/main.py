@@ -16,7 +16,7 @@ if __name__ == '__main__':
     clients = []
 
     # non-IID数据
-    client_idx = datasets.get_nonIID_data(conf)
+    client_idx = datasets.dirichlet_nonIID_data(train_datasets, conf)
 
     # print(client_idx)
 
